@@ -14,33 +14,65 @@ class WeatherScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-
-            },
+            onPressed: () {},
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
+      body: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // main card
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                child: Column(
+                  children: [
+                    Text(
+                      '300°F',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
 
-      body:const Column(
-        children: [
-          // main card
-           Placeholder(
-            fallbackHeight: 220,
-           ),
+                    SizedBox(height: 16),
+                    
+                    Icon(
+                      Icons.cloud,
+                      size: 64,
+                    ),
 
-          SizedBox(height: 20,),
-          // weather forecast card
-          Placeholder(
-            fallbackHeight: 150,
-          ),
+                    SizedBox(height: 16),
 
-          SizedBox(height: 20,),
-          // additional information
-          Placeholder(
-            fallbackHeight: 150,
-          ),
-        ],
+                    Text(
+                        'Rain',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            // weather forecast card
+            Placeholder(
+              fallbackHeight: 150,
+            ),
+
+            SizedBox(
+              height: 20,
+            ),
+            // additional information
+            Placeholder(
+              fallbackHeight: 150,
+            ),
+          ],
+        ),
       ),
     );
   }
