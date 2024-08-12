@@ -1,12 +1,43 @@
+import 'dart:convert';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:weather_app/additioninfo.dart';
-
+import 'package:weather_app/secrets.dart';
 import 'HourlyWeatherForecast.dart';
+import 'package:http/http.dart' as http;
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
+
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getCurrentWeather();
+  }
+
+  Future getCurrentWeather() async {
+    try {
+      String cityName = 'London';
+      final result = await http.get(
+        Uri.parse(
+            'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$openWeatherAPIKey'),
+      );
+
+      final data = jsonDecode(result.body);
+
+      if (data['cod'] != '200') {
+        throw 'An Unexpected Error Occur';
+      }
+      print(data['list'] [0] ['main'] ['temp']);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +159,6 @@ class WeatherScreen extends StatelessWidget {
               height: 20,
             ),
 
-
             // additional information
             const Text(
               'Additional Information',
@@ -141,7 +171,7 @@ class WeatherScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            
+
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -168,5 +198,3 @@ class WeatherScreen extends StatelessWidget {
     );
   }
 }
-
-
