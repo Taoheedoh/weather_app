@@ -14,7 +14,7 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  Future <Map<String, dynamic>> getCurrentWeather() async {
+  Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
       String cityName = 'London';
       final result = await http.get(
@@ -60,9 +60,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
-
           final data = snapshot.data;
+
+          final currentWeatherData = data?['list'][0];
+
           final currentTemp = data?['list'][0]['main']['temp'];
+          final currentSky = currentWeatherData['weather'][0]['main'];
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -83,7 +86,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           sigmaX: 10,
                           sigmaY: 10,
                         ),
-                        child:  Padding(
+                        child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
@@ -95,14 +98,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              const Icon(
-                                Icons.cloud,
+                              Icon(
+                                currentSky == 'Clouds' || currentSky == 'Rain'
+                                 ? Icons.cloud
+                                 : Icons.sunny,
                                 size: 64,
                               ),
                               const SizedBox(height: 16),
-                              const Text(
-                                'Rain',
-                                style: TextStyle(
+                              Text(
+                                currentSky,
+                                style: const TextStyle(
                                   fontSize: 20,
                                 ),
                               ),
