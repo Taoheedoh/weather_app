@@ -66,6 +66,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
           final currentTemp = data?['list'][0]['main']['temp'];
           final currentSky = currentWeatherData['weather'][0]['main'];
+          final currentPressure = currentWeatherData['main']['pressure'];
+          final currentWindSpeed = currentWeatherData['wind']['speed'];
+
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -100,8 +103,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               const SizedBox(height: 16),
                               Icon(
                                 currentSky == 'Clouds' || currentSky == 'Rain'
-                                 ? Icons.cloud
-                                 : Icons.sunny,
+                                    ? Icons.cloud
+                                    : Icons.sunny,
                                 size: 64,
                               ),
                               const SizedBox(height: 16),
@@ -185,23 +188,23 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   height: 10,
                 ),
 
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    AddInfo(
+                    const AddInfo(
                       icon: Icons.water_drop,
                       label: 'Humidity',
                       value: '91',
                     ),
-                    AddInfo(
+                     AddInfo(
                       icon: Icons.air,
                       label: 'Wind Speed',
-                      value: '7.5',
+                      value: currentWindSpeed.toString(),
                     ),
                     AddInfo(
                       icon: Icons.beach_access,
                       label: 'Pressure',
-                      value: '1000',
+                      value: currentPressure.toString(),
                     ),
                   ],
                 ),
