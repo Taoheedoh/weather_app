@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/additioninfo.dart';
 import 'package:weather_app/secrets.dart';
 import 'HourlyWeatherForecast.dart';
@@ -14,6 +15,7 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
+  late Future<Map<String, dynamic>> weather;
   Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
       String cityName = 'London';
@@ -35,6 +37,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    weather = getCurrentWeather();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -45,14 +53,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                weather = getCurrentWeather();
+              });
+            },
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
       body: FutureBuilder(
-        future: getCurrentWeather(),
+        future: weather,
         builder: (context, snapshot) {
+          // ignore: unrelated_type_equality_checks
           if (snapshot.connectionState == ConnectionState) {
             return const Center(child: CircularProgressIndicator.adaptive());
           }
@@ -69,6 +82,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
           final currentPressure = currentWeatherData['main']['pressure'];
           final currentWindSpeed = currentWeatherData['wind']['speed'];
           final currentHumidity = currentWeatherData['main']['humidity'];
+
+          //final time = DateTime.parse(formattedString)
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -145,7 +160,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     children: [
                       for (int i = 1; i < 5; i++)
                         HourlyWeatherForecast(
-                          time: data!['list'][i + 1]['dt'].toString(),
+                          time: DateFormat.j().format(
+                              DateTime.parse(data!['list'][i + 1]['dt_txt'])),
                           temperature:
                               data['list'][i + 1]['main']['temp'].toString(),
                           icon: data['list'][i + 1]['weather'][0]['main'] ==
