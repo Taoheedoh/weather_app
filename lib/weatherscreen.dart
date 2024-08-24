@@ -127,7 +127,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
 
                 const Text(
-                  'Weather Forecast',
+                  'Hourly Forecast',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -139,35 +139,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
                 // weather forecast card
 
-                const SingleChildScrollView(
+                SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      HourlyWeatherForecast(
-                        time: '00:00',
-                        temperature: '301.22',
-                        icon: Icons.cloud,
-                      ),
-                      HourlyWeatherForecast(
-                        time: '03:00',
-                        temperature: '300.22',
-                        icon: Icons.sunny,
-                      ),
-                      HourlyWeatherForecast(
-                        time: '04:00',
-                        temperature: '300.12',
-                        icon: Icons.sunny,
-                      ),
-                      HourlyWeatherForecast(
-                        time: '08:00',
-                        temperature: '304.22',
-                        icon: Icons.cloud,
-                      ),
-                      HourlyWeatherForecast(
-                        time: '12:00',
-                        temperature: '301.22',
-                        icon: Icons.sunny,
-                      ),
+                      for (int i = 1; i < 5; i++)
+                        HourlyWeatherForecast(
+                          time: data!['list'][i + 1]['dt'].toString(),
+                          temperature:
+                              data['list'][i + 1]['main']['temp'].toString(),
+                          icon: data['list'][i + 1]['weather'][0]['main'] ==
+                                      'Clouds' ||
+                                  data['list'][i + 1]['weather'][0]['main'] ==
+                                      'Rain'
+                              ? Icons.cloud
+                              : Icons.sunny,
+                        ),
                     ],
                   ),
                 ),
@@ -197,7 +184,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       label: 'Humidity',
                       value: currentHumidity.toString(),
                     ),
-                     AddInfo(
+                    AddInfo(
                       icon: Icons.air,
                       label: 'Wind Speed',
                       value: currentWindSpeed.toString(),
